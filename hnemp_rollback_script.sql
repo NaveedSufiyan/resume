@@ -1,0 +1,4 @@
+--Rollback script
+UPDATE IBILLING_EMP_RCRNG_PMT_GRPPF SET STATUS='A' WHERE recurring_payment_id='57508' AND group_or_pfid='M6416A';
+UPDATE IBILLING_EMP_RECURRING_PAYMENT SET STATUS='A' WHERE recurring_payment_id='57508' AND client_id='000153204';
+COMMIT;

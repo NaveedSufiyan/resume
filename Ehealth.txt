@@ -1,0 +1,97 @@
+Action Class
+
+
+ <action  path="/portal/support/protected/SupportRecurringPayment"      
+      type="com.healthnet.ibilling.web.SupportGrpRecurringPaymentAction" name="grpRecurringPaymentForm" scope="request" >
+     
+        <!--Commented by C914328 for OBO functionality Changes 
+      <forward name="recurringPaymentSummery" path="adminPortal.ibilling.recurringPaymentSummary"/> -->
+      <forward name="recurringPaymentSummery" 
+         className="com.healthnet.base.web.Struts1FunctionalActionForward"
+         redirect="false"
+         path="/content-generation">
+    		<set-property property="body" value="/site3/jsp_content/en/employer/iBilling/recurringPaymentSummary.jsp2" />
+    		<set-property property="contentKey" value="oboRecurringPayments" />
+		</forward>
+    </action>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+EHealth:
+Sudo -su weblogic -> Batch Server 1004
+Validate Files Every XMl file should have pdf 
+
+O0747A
+
+Note:
+After Restart of CNCuxhnww1000 Validate this This should be Up:
+https://stage.healthnet.com/content/healthnet/en_us.html
+
+
+
+
+Patching On FridaY:
+
+cncuxhnwa1000: Restart this server 
+Sudo -su weblogic
+cn passweord
+
+Path:  /opt/oracle/bea/weblogic12c/user_projects/domains/hnweb
+
+check status: ./weblogic.sh status
+Check for UpTime
+
+Then restart : ./weblogic.sh start 
+
+
+
+

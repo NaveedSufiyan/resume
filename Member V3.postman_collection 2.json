@@ -1,0 +1,377 @@
+{
+	"info": {
+		"_postman_id": "b5c554ad-7e01-4fcd-9a89-e6bf8e88b310",
+		"name": "Member V3",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "** Member V3 self **",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Basic M2IwZTM0ZTgtZjkyNC00MjI1LWFjMTMtNWQxNzEyMzk3YTlkOg==",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://api-gateway-01.centene.com/umv/v3/?identifier=7603240638",
+					"protocol": "https",
+					"host": [
+						"api-gateway-01",
+						"centene",
+						"com"
+					],
+					"path": [
+						"umv",
+						"v3",
+						""
+					],
+					"query": [
+						{
+							"key": "identifier",
+							"value": "7603240638",
+							"description": "Run this first."
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Member V3 languages",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Basic M2IwZTM0ZTgtZjkyNC00MjI1LWFjMTMtNWQxNzEyMzk3YTlkOg==",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://api-gateway-01.centene.com/umv/v3/:id/languages",
+					"protocol": "https",
+					"host": [
+						"api-gateway-01",
+						"centene",
+						"com"
+					],
+					"path": [
+						"umv",
+						"v3",
+						":id",
+						"languages"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "56e2f54d600f5d2c58bc14ca",
+							"description": "Use ID attribute from \"Self\" call."
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Member V3 identifiers",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Basic M2IwZTM0ZTgtZjkyNC00MjI1LWFjMTMtNWQxNzEyMzk3YTlkOg==",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://api-gateway-01.centene.com/umv/v3/:id/identifiers",
+					"protocol": "https",
+					"host": [
+						"api-gateway-01",
+						"centene",
+						"com"
+					],
+					"path": [
+						"umv",
+						"v3",
+						":id",
+						"identifiers"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "56e2f54d600f5d2c58bc14ca",
+							"description": "Use ID attribute from \"Self\" call."
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Member V3 alternatecontacts",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Basic M2IwZTM0ZTgtZjkyNC00MjI1LWFjMTMtNWQxNzEyMzk3YTlkOg==",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://api-gateway-01.centene.com/umv/v3/:id/alternatecontacts",
+					"protocol": "https",
+					"host": [
+						"api-gateway-01",
+						"centene",
+						"com"
+					],
+					"path": [
+						"umv",
+						"v3",
+						":id",
+						"alternatecontacts"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "56e2f54d600f5d2c58bc14ca",
+							"description": "Use ID attribute from \"Self\" call."
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Member V3 phonenumbers",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Basic M2IwZTM0ZTgtZjkyNC00MjI1LWFjMTMtNWQxNzEyMzk3YTlkOg==",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://api-gateway-01.centene.com/umv/v3/:id/phonenumbers",
+					"protocol": "https",
+					"host": [
+						"api-gateway-01",
+						"centene",
+						"com"
+					],
+					"path": [
+						"umv",
+						"v3",
+						":id",
+						"phonenumbers"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "56e2f54d600f5d2c58bc14ca",
+							"description": "Use ID attribute from \"Self\" call."
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Member V3 pcps",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Basic M2IwZTM0ZTgtZjkyNC00MjI1LWFjMTMtNWQxNzEyMzk3YTlkOg==",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://api-gateway-01.centene.com/umv/v3/:id/pcps",
+					"protocol": "https",
+					"host": [
+						"api-gateway-01",
+						"centene",
+						"com"
+					],
+					"path": [
+						"umv",
+						"v3",
+						":id",
+						"pcps"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "56e2f54d600f5d2c58bc14ca",
+							"description": "Use ID attribute from \"Self\" call."
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Member V3 enrollmentspans",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Basic M2IwZTM0ZTgtZjkyNC00MjI1LWFjMTMtNWQxNzEyMzk3YTlkOg==",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://api-gateway-01.centene.com/umv/v3/:id/enrollmentspans",
+					"protocol": "https",
+					"host": [
+						"api-gateway-01",
+						"centene",
+						"com"
+					],
+					"path": [
+						"umv",
+						"v3",
+						":id",
+						"enrollmentspans"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "56e2f54d600f5d2c58bc14ca",
+							"description": "Use ID attribute from \"Self\" call."
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Member V3 addresses",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Basic M2IwZTM0ZTgtZjkyNC00MjI1LWFjMTMtNWQxNzEyMzk3YTlkOg==",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://api-gateway-01.centene.com/umv/v3/:id/addresses",
+					"protocol": "https",
+					"host": [
+						"api-gateway-01",
+						"centene",
+						"com"
+					],
+					"path": [
+						"umv",
+						"v3",
+						":id",
+						"addresses"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "56e2f54d600f5d2c58bc14ca",
+							"description": "Use ID attribute from \"Self\" call."
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Member V3 emails",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Basic M2IwZTM0ZTgtZjkyNC00MjI1LWFjMTMtNWQxNzEyMzk3YTlkOg==",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://api-gateway-01.centene.com/umv/v3/:id/emails",
+					"protocol": "https",
+					"host": [
+						"api-gateway-01",
+						"centene",
+						"com"
+					],
+					"path": [
+						"umv",
+						"v3",
+						":id",
+						"emails"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "56e2f54d600f5d2c58bc14ca",
+							"description": "Use ID attribute from \"Self\" call."
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

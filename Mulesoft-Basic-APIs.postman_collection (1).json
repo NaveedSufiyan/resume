@@ -1,0 +1,88 @@
+{
+	"info": {
+		"_postman_id": "353cb0ac-1c33-4c42-acc5-c91481e6baaf",
+		"name": "Mulesoft-Basic-APIs",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Mule-TokenGen-verify",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "https://crm.svcs.fideliscare.org/oauth2/v1/token?grant_type=CLIENT_CREDENTIALS&client_id=c6f05f71e2fd4a8189723d230eafe027&client_secret=Ad08DcfAa0A041f6870166D442c70D3A&username=srvcPRVPortalMulePRD@ads&password=fbI!4fQcXC1@Z7%23efaxYJifXCf!kYUUbMuk@xF",
+					"protocol": "https",
+					"host": [
+						"crm",
+						"svcs",
+						"fideliscare",
+						"org"
+					],
+					"path": [
+						"oauth2",
+						"v1",
+						"token"
+					],
+					"query": [
+						{
+							"key": "grant_type",
+							"value": "CLIENT_CREDENTIALS"
+						},
+						{
+							"key": "client_id",
+							"value": "c6f05f71e2fd4a8189723d230eafe027"
+						},
+						{
+							"key": "client_secret",
+							"value": "Ad08DcfAa0A041f6870166D442c70D3A"
+						},
+						{
+							"key": "username",
+							"value": "srvcPRVPortalMulePRD@ads"
+						},
+						{
+							"key": "password",
+							"value": "fbI!4fQcXC1@Z7%23efaxYJifXCf!kYUUbMuk@xF"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Mule-CreateClient",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "client_id",
+						"value": "c6f05f71e2fd4a8189723d230eafe027",
+						"type": "text"
+					},
+					{
+						"key": "client_secret",
+						"value": "Ad08DcfAa0A041f6870166D442c70D3A",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://crm.svcs.fideliscare.org/oauth2/v1/createClient",
+					"protocol": "https",
+					"host": [
+						"crm",
+						"svcs",
+						"fideliscare",
+						"org"
+					],
+					"path": [
+						"oauth2",
+						"v1",
+						"createClient"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

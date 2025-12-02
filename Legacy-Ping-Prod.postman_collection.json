@@ -1,0 +1,1519 @@
+{
+	"info": {
+		"_postman_id": "68aa5f06-9644-4bff-a563-ea2bb78b4e21",
+		"name": "Legacy-Ping-Prod",
+		"description": "Sample Postman Collection for Directory REST API covering the supported operations for the following endpoints:\n\nDirectory entry\nSubtree\nSchema\n\nNOTE: API calls are using Basic Auth, however bearer token auth may be used and there is a sample ROPC call to obtain an access token from PingFederate included. You can use the resulting bearer token in API calls by changing Authorization from \"inherit auth from parent\" to \"Bearer Token\" and pasting in the token.\n\n\nAssumptions: \n\n1. Have configured a REST ADMIN user and given permissions for operations. (see below for a sample admin and ACI samples)\n\ndn: ou=Service Accounts,ou=People,dc=example,dc=com\nobjectClass: top\nobjectClass: organizationalUnit\nou: Service Accounts\n\ndn: uid=RestAdmin,ou=Service Accounts,ou=People,dc=example,dc=com\nobjectClass: top\nobjectClass: person\nobjectClass: organizationalPerson\nobjectClass: inetOrgPerson\nsn: Administrator\ncn: Rest Admin\nds-privilege-name: proxied-auth\nds-privilege-name: password-reset\nuserPassword: password\nuid: RestAdmin\n\ndn: dc=example,dc=com\nchangetype: modify\nadd: aci\naci: (target=\"ldap:///dc=example,dc=com\")(targetattr=\"*||+\")(version 3.0; acl \"Rest Admin should be able to proxy as users\"; allow(proxy) userdn=\"ldap:///uid=RestAdmin,ou=Service Accounts,ou=People,dc=example,dc=com\";)\naci: (target=\"ldap:///dc=example,dc=com\")(targetattr=\"*||+\")(version 3.0; acl \"Rest Admin should have full permissions\"; allow(all) userdn=\"ldap:///uid=RestAdmin,ou=Service Accounts,ou=People,dc=example,dc=com\";)\naci: (extop=\"1.3.6.1.4.1.30221.2.6.17\")(version 3.0; acl \"Grant access to the Multi Update Extended Request for the rest-api-client account\"; allow (all) userdn=\"ldap:///uid=RestAdmin,ou=Service Accounts,ou=People,dc=example,dc=com\";)\naci: (target=\"ldap:///dc=example,dc=com\")(version 3.0; acl \"Rest Admin should have full permissions\"; allow(export,import) userdn=\"ldap:///uid=RestAdmin,ou=Service Accounts,ou=People,dc=example,dc=com\";)\n\n\n2. Schema has been defined for certain attributes (like salary) so as to test certain PATCH functionality (see below for sample schema that may be copied into 99-user.ldif and ldapmodify to apply objectClass to people branch)\n\ndn: cn=schema\nobjectClass: top\nobjectClass: ldapSubentry\nobjectClass: subschema\ncn: schema\nattributeTypes: ( salary-OID NAME 'salary' SYNTAX 1.3.6.1.4.1.1466.115.121.1.27 SINGLE-VALUE USAGE userApplications X-ORIGIN 'RFC 4524' )\nattributeTypes: ( 1.3.6.1.4.1.32473.3.1.9.4 NAME 'managerName' EQUALITY caseIgnoreMatch SUBSTR caseIgnoreSubstringsMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.44{256} X-ORIGIN 'Directory Server Example' )\nobjectClasses: ( SalaryObjectClass-OID NAME 'SalaryObjectClass' SUP inetOrgPerson MAY ( salary $ ubidEmailJSON ) X-ORIGIN 'RFC 4524' )\n\nbin/ldapmodify --modifyEntriesMatchingFilter \"(objectClass=inetOrgPerson)\" <<+\ndn: ou=People,dc=example,dc=com\nchangetype: modify\nadd: objectClass\nobjectClass: SalaryObjectClass\n+\n\n3. Have assigned manager attributes to users to test expand functionality (see below for a sample ldapmodify to add a manager attribute to a user object)\n\nbin/ldapmodify <<+\ndn: uid=user.1,ou=people,dc=example,dc=com\nchangetype: modify\nadd: manager\nmanager: uid=RestAdmin,ou=Service Accounts,ou=people,dc=example,dc=com\n+\n\n\n",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get metadata about the API and server",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "pingrestapi_svc",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "P1ngA9#S80",
+							"type": "string"
+						},
+						{
+							"key": "saveHelperData",
+							"type": "any"
+						},
+						{
+							"key": "showPassword",
+							"value": false,
+							"type": "boolean"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://pingdirectory.stage-centene.us1.ping.cloud/directory/v1",
+					"protocol": "https",
+					"host": [
+						"pingdirectory",
+						"stage-centene",
+						"us1",
+						"ping",
+						"cloud"
+					],
+					"path": [
+						"directory",
+						"v1"
+					]
+				},
+				"description": "Directory entry endpoint\n\nA GET request on the base endpoint, /directory/v1, returns metadata about the server and API. It also returns a list of configured schemas allowed on the server. "
+			},
+			"response": []
+		},
+		{
+			"name": "Get the current authenticated user",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "pingrestapi_svc",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "P1ngA9#S80",
+							"type": "string"
+						},
+						{
+							"key": "saveHelperData",
+							"type": "any"
+						},
+						{
+							"key": "showPassword",
+							"value": false,
+							"type": "boolean"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://pingdirectory.stage-centene.us1.ping.cloud/directory/v1/me",
+					"protocol": "https",
+					"host": [
+						"pingdirectory",
+						"stage-centene",
+						"us1",
+						"ping",
+						"cloud"
+					],
+					"path": [
+						"directory",
+						"v1",
+						"me"
+					]
+				},
+				"description": "Directory entry endpoint\n\nIn addition to retrieving a specified resource by providing the distinguished name, you can get the record of the currently authenticated user by calling the alias GET /directory/v1/me."
+			},
+			"response": []
+		},
+		{
+			"name": "Get all users",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "P1ngA9#S80",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "pingrestapi_svc",
+							"type": "string"
+						},
+						{
+							"key": "saveHelperData",
+							"type": "any"
+						},
+						{
+							"key": "showPassword",
+							"value": false,
+							"type": "boolean"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://pingdirectory.stage-centene.us1.ping.cloud/directory/v1/ou=hnweb_employers,ou=Users,ou=Hni,ou=External,dc=centene,dc=com/subtree?searchScope=subordinateSubtree&includeAttributes=*,_operationalAttributes&limit=20",
+					"protocol": "https",
+					"host": [
+						"pingdirectory",
+						"stage-centene",
+						"us1",
+						"ping",
+						"cloud"
+					],
+					"path": [
+						"directory",
+						"v1",
+						"ou=hnweb_employers,ou=Users,ou=Hni,ou=External,dc=centene,dc=com",
+						"subtree"
+					],
+					"query": [
+						{
+							"key": "searchScope",
+							"value": "subordinateSubtree"
+						},
+						{
+							"key": "includeAttributes",
+							"value": "*,_operationalAttributes"
+						},
+						{
+							"key": "limit",
+							"value": "20"
+						}
+					]
+				},
+				"description": "Directory entry endpoint\n\nthe GET /directory/v1/{dn} operation returns the directory entry specified by its distinguished name (dn)."
+			},
+			"response": []
+		},
+		{
+			"name": "Retrieve a single user entry and all attributes",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "Y9tL9YdMKzse8zNB",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "pdwebLogic_svc",
+							"type": "string"
+						},
+						{
+							"key": "saveHelperData",
+							"type": "any"
+						},
+						{
+							"key": "showPassword",
+							"value": false,
+							"type": "boolean"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://pingdirectory.prod-centene.us2.ping.cloud/directory/v1/cn=proforwarding,ou=hnweb_employers,ou=Users,ou=Hni,ou=External,dc=centene,dc=com?includeAttributes=*,_operationalAttributes",
+					"protocol": "https",
+					"host": [
+						"pingdirectory",
+						"prod-centene",
+						"us2",
+						"ping",
+						"cloud"
+					],
+					"path": [
+						"directory",
+						"v1",
+						"cn=proforwarding,ou=hnweb_employers,ou=Users,ou=Hni,ou=External,dc=centene,dc=com"
+					],
+					"query": [
+						{
+							"key": "includeAttributes",
+							"value": "*,_operationalAttributes"
+						}
+					]
+				},
+				"description": "Directory entry endpoint\n\nthe GET /directory/v1/{dn} operation returns the directory entry specified by its distinguished name (dn)."
+			},
+			"response": []
+		},
+		{
+			"name": "Retrieve a single user entry and all attributes Copy",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "pdwebLogic_svc",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "Y9tL9YdMKzse8zNB",
+							"type": "string"
+						},
+						{
+							"key": "saveHelperData",
+							"type": "any"
+						},
+						{
+							"key": "showPassword",
+							"value": false,
+							"type": "boolean"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://pingdirectory.prod-centene.us1.ping.cloud/directory/v1/cn=kgalliou,ou=hnweb_employers,ou=Users,ou=Hni,ou=External,dc=centene,dc=com?includeAttributes=*,_operationalAttributes",
+					"protocol": "https",
+					"host": [
+						"pingdirectory",
+						"prod-centene",
+						"us1",
+						"ping",
+						"cloud"
+					],
+					"path": [
+						"directory",
+						"v1",
+						"cn=kgalliou,ou=hnweb_employers,ou=Users,ou=Hni,ou=External,dc=centene,dc=com"
+					],
+					"query": [
+						{
+							"key": "includeAttributes",
+							"value": "*,_operationalAttributes"
+						}
+					]
+				},
+				"description": "Directory entry endpoint\n\nthe GET /directory/v1/{dn} operation returns the directory entry specified by its distinguished name (dn)."
+			},
+			"response": []
+		},
+		{
+			"name": "Retrieve a single user based on hniUid",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "{{password}}",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "{{binddn}}",
+							"type": "string"
+						},
+						{
+							"key": "saveHelperData",
+							"type": "any"
+						},
+						{
+							"key": "showPassword",
+							"value": false,
+							"type": "boolean"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://{{hostname}}:{{port}}/directory/v1/{{userbasedn}}/subtree?searchScope=wholeSubtree&filter=hniUid eq {{hniuidvalue}}",
+					"protocol": "https",
+					"host": [
+						"{{hostname}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"directory",
+						"v1",
+						"{{userbasedn}}",
+						"subtree"
+					],
+					"query": [
+						{
+							"key": "searchScope",
+							"value": "wholeSubtree"
+						},
+						{
+							"key": "filter",
+							"value": "hniUid eq {{hniuidvalue}}"
+						}
+					]
+				},
+				"description": "Directory entry endpoint\n\nthe GET /directory/v1/{dn} operation returns the directory entry specified by its distinguished name (dn)."
+			},
+			"response": []
+		},
+		{
+			"name": "Retrieve a single user and include attributes only",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "{{password}}",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "{{binddn}}",
+							"type": "string"
+						},
+						{
+							"key": "saveHelperData",
+							"type": "any"
+						},
+						{
+							"key": "showPassword",
+							"value": false,
+							"type": "boolean"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://{{hostname}}:{{port}}/directory/v1/{{user_to_retrieve}}?includeAttributes=isMemberOf,hniUserType",
+					"protocol": "https",
+					"host": [
+						"{{hostname}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"directory",
+						"v1",
+						"{{user_to_retrieve}}"
+					],
+					"query": [
+						{
+							"key": "includeAttributes",
+							"value": "isMemberOf,hniUserType"
+						}
+					]
+				},
+				"description": "Directory entry endpoint\n\nincludeAttributes\n\nSpecifies the attribute or attributes in the entry that should be included in the response.\n\nThese request parameters accept a comma-separated list of attributes to either include or exclude from the response entries. They also support the following aliases as values:\n\n    *\n\n    Refers to all user attributes of the resource.\n\n    _operationalAttributes\n\n    Refers to all operational attributes of the resource.\n"
+			},
+			"response": []
+		},
+		{
+			"name": "Retrieve a single user and exclude attributes",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "{{password}}",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "{{binddn}}",
+							"type": "string"
+						},
+						{
+							"key": "saveHelperData",
+							"type": "any"
+						},
+						{
+							"key": "showPassword",
+							"value": false,
+							"type": "boolean"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://{{hostname}}:{{port}}/directory/v1/{{user_to_retrieve}}?excludeAttributes=cn, isMemberOf, mail, name",
+					"protocol": "https",
+					"host": [
+						"{{hostname}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"directory",
+						"v1",
+						"{{user_to_retrieve}}"
+					],
+					"query": [
+						{
+							"key": "excludeAttributes",
+							"value": "cn, isMemberOf, mail, name"
+						}
+					]
+				},
+				"description": "Directory entry endpoint\n\n\n\n    excludeAttributes\n\n    Specifies the attribute or attributes in the entry that should be excluded in the response.\n\nThese request parameters accept a comma-separated list of attributes to either include or exclude from the response entries. They also support the following aliases as values:\n\n    *\n\n    Refers to all user attributes of the resource.\n\n    _operationalAttributes\n\n    Refers to all operational attributes of the resource.\n"
+			},
+			"response": []
+		},
+		{
+			"name": "Retrieve a single user entry with include and exclude attribute logic",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "5bhyckwCvtRa",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "pdwebLogic_svc",
+							"type": "string"
+						},
+						{
+							"key": "saveHelperData",
+							"type": "any"
+						},
+						{
+							"key": "showPassword",
+							"value": false,
+							"type": "boolean"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://pingdirectory.prod-centene.us1.ping.cloud/directory/v1/cn=phskfall,ou=hnweb_employers,ou=Users,ou=Hni,ou=External,dc=centene,dc=com?includeAttributes=isMemberOf",
+					"protocol": "https",
+					"host": [
+						"pingdirectory",
+						"prod-centene",
+						"us1",
+						"ping",
+						"cloud"
+					],
+					"path": [
+						"directory",
+						"v1",
+						"cn=phskfall,ou=hnweb_employers,ou=Users,ou=Hni,ou=External,dc=centene,dc=com"
+					],
+					"query": [
+						{
+							"key": "includeAttributes",
+							"value": "isMemberOf"
+						}
+					]
+				},
+				"description": "Directory entry endpoint\n\nFor example, includeAttributes=*&excludeAttributes=sn returns all user attributes except sn, but excludeAttributes=*&includeAttributes=sn returns no attributes (except DN)."
+			},
+			"response": []
+		},
+		{
+			"name": "Create a new entry",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "{{password}}",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "{{binddn}}",
+							"type": "string"
+						},
+						{
+							"key": "saveHelperData",
+							"type": "any"
+						},
+						{
+							"key": "showPassword",
+							"value": false,
+							"type": "boolean"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"_dn\": \"cn=genesis2.102,ou=genesisusers,ou=Users,ou=Hni,ou=External,dc=centene,dc=com\",\n    \"objectClass\": [\n        \"hniUser\"],\n    \"sn\": [\"user102\"],\n    \"cn\": [\"genesis2.102\"],\n    \"hniUid\":17990813102,\n    \"mail\": [\"genesis2@centene.us\"],\n    \"userPassword\": [\"Password123\"]\n   \n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{hostname}}:{{port}}/directory/v1/",
+					"protocol": "https",
+					"host": [
+						"{{hostname}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"directory",
+						"v1",
+						""
+					]
+				},
+				"description": "Directory entry endpoint\n\nThe POST /directory/v1 operation adds a new entry to the directory. The request body must contain all of the required attributes as defined in the schema. If there are no required attributes defined in the schema, you can submit a valid create request with only the _dn attribute in the request body."
+			},
+			"response": []
+		},
+		{
+			"name": "Update an entry with PUT",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "P1ngA9#S80",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "pingrestapi_svc",
+							"type": "string"
+						},
+						{
+							"key": "saveHelperData",
+							"type": "any"
+						},
+						{
+							"key": "showPassword",
+							"value": false,
+							"type": "boolean"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": [\"testbroker123\"],\n\t\"mail\": [\"PraveenVeerapandi.Sundaram@centene.com\"]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://pingdirectory.stage-centene.us1.ping.cloud/directory/v1/cn=testbroker123,ou=hnweb_brokers,ou=Users,ou=Hni,ou=External,dc=centene,dc=com",
+					"protocol": "https",
+					"host": [
+						"pingdirectory",
+						"stage-centene",
+						"us1",
+						"ping",
+						"cloud"
+					],
+					"path": [
+						"directory",
+						"v1",
+						"cn=testbroker123,ou=hnweb_brokers,ou=Users,ou=Hni,ou=External,dc=centene,dc=com"
+					]
+				},
+				"description": "Directory entry endpoint\n\nthe PUT /directory/v1/{dn} endpoint modifies the entry specified by its distinguished name. Attribute values specified in the request body are updated; existing attributes omitted from the request maintain their current values. Attribute values set to null in the request body are removed from the entry."
+			},
+			"response": []
+		},
+		{
+			"name": "Password change",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "pdwebLogic_svc",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "Y9tL9YdMKzse8zNB",
+							"type": "string"
+						},
+						{
+							"key": "saveHelperData",
+							"type": "any"
+						},
+						{
+							"key": "showPassword",
+							"value": false,
+							"type": "boolean"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"modifications\": [\n    {\n      \"attributeName\": \"userPassword\",\n      \"modificationType\": \"set\",\n      \"values\": [\"Password$123\"]\n    }\n ]\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://pingdirectory.prod-centene.us1.ping.cloud/directory/v1/cn=kgallibmgmt,ou=hnweb_employers,ou=Users,ou=Hni,ou=External,dc=centene,dc=com",
+					"protocol": "https",
+					"host": [
+						"pingdirectory",
+						"prod-centene",
+						"us1",
+						"ping",
+						"cloud"
+					],
+					"path": [
+						"directory",
+						"v1",
+						"cn=kgallibmgmt,ou=hnweb_employers,ou=Users,ou=Hni,ou=External,dc=centene,dc=com"
+					]
+				},
+				"description": "Directory entry endpoint\n\nThe PATCH /directory/v1/{dn} endpoint functions just like an LDAP ldapmodify operation. Similar to the PUT update operation, the PATCH operation does not allow partial changes to a JSON object.\n\nThe request body requires the modificationType property, which supports the following four types of modifications:\n\n    add\n\n    Adds the attribute value (or values) specified in the values property.\n\n    remove\n\n    Removes the attribute value (or values) specified in the values property.\n\n    set\n\n    Replaces all the values in the specified attribute with the value (or values) specified in values property.\n\n    increment\n\n    Changes the integer value of the attribute by the amount specified in the values property. The request values should contain a single number, and the attribute must be a single-value or a multiple value integer type. If the attribute is a multiple values integer type, the increment gets applied to all the values. For example, if the attribute had [1, 2] before the increment and the increment had values of 5, then after the increment, the attribute would have [6,7].\n"
+			},
+			"response": []
+		},
+		{
+			"name": "Lock/Unlock account",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "pdwebLogic_svc",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "A1q!E$1nlq",
+							"type": "string"
+						},
+						{
+							"key": "saveHelperData",
+							"type": "any"
+						},
+						{
+							"key": "showPassword",
+							"value": false,
+							"type": "boolean"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "\n{\n\t\"modifications\": [\n         {\n            \"attributeName\": \"hniIsDisabled\",\n            \"modificationType\": \"set\",\n            \"values\": false        \n    }\n  ]\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://pingdirectory.prod-centene.us1.ping.cloud/directory/v1/cn=theboneadventur,ou=hnweb_employers,ou=Users,ou=Hni,ou=External,dc=centene,dc=com",
+					"protocol": "https",
+					"host": [
+						"pingdirectory",
+						"prod-centene",
+						"us1",
+						"ping",
+						"cloud"
+					],
+					"path": [
+						"directory",
+						"v1",
+						"cn=theboneadventur,ou=hnweb_employers,ou=Users,ou=Hni,ou=External,dc=centene,dc=com"
+					]
+				},
+				"description": "Directory entry endpoint\n\nThe PATCH /directory/v1/{dn} endpoint functions just like an LDAP ldapmodify operation. Similar to the PUT update operation, the PATCH operation does not allow partial changes to a JSON object.\n\nThe request body requires the modificationType property, which supports the following four types of modifications:\n\n    add\n\n    Adds the attribute value (or values) specified in the values property.\n\n    remove\n\n    Removes the attribute value (or values) specified in the values property.\n\n    set\n\n    Replaces all the values in the specified attribute with the value (or values) specified in values property.\n\n    increment\n\n    Changes the integer value of the attribute by the amount specified in the values property. The request values should contain a single number, and the attribute must be a single-value or a multiple value integer type. If the attribute is a multiple values integer type, the increment gets applied to all the values. For example, if the attribute had [1, 2] before the increment and the increment had values of 5, then after the increment, the attribute would have [6,7].\n"
+			},
+			"response": []
+		},
+		{
+			"name": "Rename an entry",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "{{password}}",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "{{binddn}}",
+							"type": "string"
+						},
+						{
+							"key": "saveHelperData",
+							"type": "any"
+						},
+						{
+							"key": "showPassword",
+							"value": false,
+							"type": "boolean"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"_dn\": \"cn=genesis2.101,ou=genesisusers,ou=Users,ou=Hni,ou=External,dc=centene,dc=com\",\n  \"cn\": [\"genesis2.101\"]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{hostname}}:{{port}}/directory/v1/{{entry_to_edit}}",
+					"protocol": "https",
+					"host": [
+						"{{hostname}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"directory",
+						"v1",
+						"{{entry_to_edit}}"
+					]
+				},
+				"description": "Directory entry endpoint\n\nThe PUT /directory/v1/{dn} endpoint functions like an LDAP moddn operation for moving or renaming one LDAP entry when the _dn attribute is included in the request. To change the DN of an entry, both the new DN and the naming attribute, the attribute used in the entry’s RDN (relative distinguished name), must be present in the specified entry, even if the naming attribute is not changing. This rename operation can be in the same request as other attributes are modified. However, an error from either the rename or the modify portions of the request causes the entire operation to fail.\n\nNote: If an entry is renamed and modified in one request, a Multi-Update Request Extended Request (OID 1.3.6.1.4.1.30221.2.6.17) is used. The request can fail if no ACI is created to allow a user to use this request, even if the user has permission to perform modify and rename operations independently. The following sample shows a multi-update ACI:\n\n(extop=\"11.3.6.1.4.1.30221.2.6.17\")(version 3.0; acl \"Grant access to the Multi Update Extended Request for the rest-api-client account\"; allow (all) userdn=\"ldap:///uid=rest-api-client,o=example\";)"
+			},
+			"response": []
+		},
+		{
+			"name": "Move an entry by modifying parent DN",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "{{password}}",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "{{binddn}}",
+							"type": "string"
+						},
+						{
+							"key": "saveHelperData",
+							"type": "any"
+						},
+						{
+							"key": "showPassword",
+							"value": false,
+							"type": "boolean"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"_dn\": \"cn=genesis2.102,ou=hnweb_brokers,ou=Users,ou=Hni,ou=External,dc=centene,dc=com\",\n  \"cn\": [\"genesis2.102\"]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{hostname}}:{{port}}/directory/v1/{{entry_to_move}}",
+					"protocol": "https",
+					"host": [
+						"{{hostname}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"directory",
+						"v1",
+						"{{entry_to_move}}"
+					]
+				},
+				"description": "Directory entry endpoint\n\nYou can also change the parent DN, in addition to or independent of the RDN, in order to move the entry. The new parent DN must point to an existing entry and the naming attribute must still be provided, even if the RDN does not change.\n\nYou can also modify other attributes in addition to the parent DN in this request."
+			},
+			"response": []
+		},
+		{
+			"name": "Delete an entry",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "{{password}}",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "{{binddn}}",
+							"type": "string"
+						},
+						{
+							"key": "saveHelperData",
+							"type": "any"
+						},
+						{
+							"key": "showPassword",
+							"value": false,
+							"type": "boolean"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://pingdirectory-admin.prod-centene.us1.ping.cloud:636/directory/v1/{{entry_to_delete}}",
+					"protocol": "https",
+					"host": [
+						"pingdirectory-admin",
+						"prod-centene",
+						"us1",
+						"ping",
+						"cloud"
+					],
+					"port": "636",
+					"path": [
+						"directory",
+						"v1",
+						"{{entry_to_delete}}"
+					]
+				},
+				"description": "Directory entry endpoint\n\nThe DELETE /directory/v1/{dn} operation deletes the entry specified by its distinguished name from the directory.\n\nWhen successful, the response returns a 204 NO CONTENT message.\n\nNote: Only one entry can be deleted in a delete operation. Subtree delete is not supported. Delete operations on an entry with children results in a 400 BAD REQUEST response."
+			},
+			"response": []
+		},
+		{
+			"name": "Create a group",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "{{password}}",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "{{binddn}}",
+							"type": "string"
+						},
+						{
+							"key": "saveHelperData",
+							"type": "any"
+						},
+						{
+							"key": "showPassword",
+							"value": false,
+							"type": "boolean"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"_dn\": \"cn=genisis_Users,ou=hnweb_broker_portal,ou=ApplicationRoles,ou=Hni,ou=External,dc=centene,dc=com\",\n    \"objectClass\": [\n        \"top\",\n        \"groupofUniqueNames\"\n        ],\n    \"ou\": [\"hnweb_broker_portal\"],\n    \"cn\": [\"genisis_Users\"],\n    \"uniqueMember\": [\n    \t\"cn=genesis2.101,ou=genesisusers,ou=Users,ou=Hni,ou=External,dc=centene,dc=com\",\n        \"cn=genesis2.102,ou=genesisusers,ou=Users,ou=Hni,ou=External,dc=centene,dc=com\"\n        ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{hostname}}:{{port}}/directory/v1/",
+					"protocol": "https",
+					"host": [
+						"{{hostname}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"directory",
+						"v1",
+						""
+					]
+				},
+				"description": "Directory entry endpoint example"
+			},
+			"response": []
+		},
+		{
+			"name": "Modify a group",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "P1ngA9#S80",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "pingrestapi_svc",
+							"type": "string"
+						},
+						{
+							"key": "saveHelperData",
+							"type": "any"
+						},
+						{
+							"key": "showPassword",
+							"value": false,
+							"type": "boolean"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"modifications\": [\n    {\n      \"attributeName\": \"isDirectMemberOf\",\n      \"modificationType\": \"set\",\n      \"values\": [\n        \"cn=mhncorp_provider.group_delegatedadmin,ou=mhncorp_provider_portal,ou=Application Roles,ou=Hni,ou=External,dc=centene,dc=com\"\n      ]\n    }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://pingdirectory.dev-centene.us1.ping.cloud/directory/v1/cn=25042test,ou=mhncorp_providers,ou=Users,ou=Hni,ou=External,dc=centene,dc=com",
+					"protocol": "https",
+					"host": [
+						"pingdirectory",
+						"dev-centene",
+						"us1",
+						"ping",
+						"cloud"
+					],
+					"path": [
+						"directory",
+						"v1",
+						"cn=25042test,ou=mhncorp_providers,ou=Users,ou=Hni,ou=External,dc=centene,dc=com"
+					]
+				},
+				"description": "Directory entry endpoint example"
+			},
+			"response": []
+		},
+		{
+			"name": "Retrieve a group",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "pingrestapi_svc",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "P1ngA9#S80",
+							"type": "string"
+						},
+						{
+							"key": "saveHelperData",
+							"type": "any"
+						},
+						{
+							"key": "showPassword",
+							"value": false,
+							"type": "boolean"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://pingdirectory.stage-centene.us1.ping.cloud/directory/v1/ou=hnweb_brokers,ou=Users,ou=Hni,ou=External,dc=centene,dc=com",
+					"protocol": "https",
+					"host": [
+						"pingdirectory",
+						"stage-centene",
+						"us1",
+						"ping",
+						"cloud"
+					],
+					"path": [
+						"directory",
+						"v1",
+						"ou=hnweb_brokers,ou=Users,ou=Hni,ou=External,dc=centene,dc=com"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					]
+				},
+				"description": "Directory entry endpoint example"
+			},
+			"response": []
+		},
+		{
+			"name": "Search a subtree",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "P1ngA9#S80",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "pingrestapi_svc",
+							"type": "string"
+						},
+						{
+							"key": "saveHelperData",
+							"type": "any"
+						},
+						{
+							"key": "showPassword",
+							"value": false,
+							"type": "boolean"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://pingdirectory.stage-centene.us1.ping.cloud/directory/v1/ou=hnweb_brokers,ou=Users,ou=Hni,ou=External,dc=centene,dc=com/subtree?searchScope=wholeSubtree",
+					"protocol": "https",
+					"host": [
+						"pingdirectory",
+						"stage-centene",
+						"us1",
+						"ping",
+						"cloud"
+					],
+					"path": [
+						"directory",
+						"v1",
+						"ou=hnweb_brokers,ou=Users,ou=Hni,ou=External,dc=centene,dc=com",
+						"subtree"
+					],
+					"query": [
+						{
+							"key": "searchScope",
+							"value": "wholeSubtree"
+						}
+					]
+				},
+				"description": "Directory subtree endpoint\n\nTo retrieve a list of entries under a subtree of an entry, use the {dn}/subtree endpoint. This endpoint requires the searchScope parameter. The supported search scopes are:\n\n    baseObject\n\n    Returns only the object directly described by the base DN.\n\n    singleLevel\n\n    Returns only the entries that are immediate children of the base entry.\n\n    wholeSubtree\n\n    Returns the base entry and all of its descendants.\n\n    subordinateSubtree\n\n    Returns the descendants of the base entry, but not the base entry itself.\n\nThe server will enforce the max page size if not specified by the client. "
+			},
+			"response": []
+		},
+		{
+			"name": "Search a subtree using paged results",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "P1ngA9#S80",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "pingrestapi_svc",
+							"type": "string"
+						},
+						{
+							"key": "saveHelperData",
+							"type": "any"
+						},
+						{
+							"key": "showPassword",
+							"value": false,
+							"type": "boolean"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://pingdirectory.stage-centene.us1.ping.cloud/directory/v1/ou=hnweb_brokers,ou=Users,ou=Hni,ou=External,dc=centene,dc=com/subtree?searchScope=wholeSubtree&limit=20",
+					"protocol": "https",
+					"host": [
+						"pingdirectory",
+						"stage-centene",
+						"us1",
+						"ping",
+						"cloud"
+					],
+					"path": [
+						"directory",
+						"v1",
+						"ou=hnweb_brokers,ou=Users,ou=Hni,ou=External,dc=centene,dc=com",
+						"subtree"
+					],
+					"query": [
+						{
+							"key": "searchScope",
+							"value": "wholeSubtree"
+						},
+						{
+							"key": "limit",
+							"value": "20"
+						}
+					]
+				},
+				"description": "Directory subtree endpoint\n\nTo retrieve a list of entries under a subtree of an entry, use the {dn}/subtree endpoint. This endpoint requires the searchScope parameter. The supported search scopes are:\n\n    baseObject\n\n    Returns only the object directly described by the base DN.\n\n    singleLevel\n\n    Returns only the entries that are immediate children of the base entry.\n\n    wholeSubtree\n\n    Returns the base entry and all of its descendants.\n\n    subordinateSubtree\n\n    Returns the descendants of the base entry, but not the base entry itself.\n    \nAll list requests are paged. The limit parameter specifies the page size. However, the page size can be smaller than requested, either because the server has a configured maximum page size or because you have reached the last page and there are not enough entries to fill the page.\n\nThe next link enables navigation forward from the current page to the next page. The directory service does not support a previous link to move backward from the current page.\n\nThe size value on the returned object shows the actual number of entries returned in the request.\n\nThe searchScope parameter value is encoded in the cursor parameter in the next link URL. \n \nThe search scope does not need to be provided on subsequent requests. \n"
+			},
+			"response": []
+		},
+		{
+			"name": "Search a subtree and include/exclude attributes",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "P1ngA9#S80",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "pingrestapi_svc",
+							"type": "string"
+						},
+						{
+							"key": "saveHelperData",
+							"type": "any"
+						},
+						{
+							"key": "showPassword",
+							"value": false,
+							"type": "boolean"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://pingdirectory.stage-centene.us1.ping.cloud/directory/v1/ou=hnweb_brokers,ou=Users,ou=Hni,ou=External,dc=centene,dc=com/subtree?searchScope=wholeSubtree&limit=100&includeAttributes=*&excludeAttributes=sn,mail",
+					"protocol": "https",
+					"host": [
+						"pingdirectory",
+						"stage-centene",
+						"us1",
+						"ping",
+						"cloud"
+					],
+					"path": [
+						"directory",
+						"v1",
+						"ou=hnweb_brokers,ou=Users,ou=Hni,ou=External,dc=centene,dc=com",
+						"subtree"
+					],
+					"query": [
+						{
+							"key": "searchScope",
+							"value": "wholeSubtree"
+						},
+						{
+							"key": "limit",
+							"value": "100"
+						},
+						{
+							"key": "includeAttributes",
+							"value": "*"
+						},
+						{
+							"key": "excludeAttributes",
+							"value": "sn,mail"
+						}
+					]
+				},
+				"description": "Directory subtree endpoint\n\nTo retrieve a list of entries under a subtree of an entry, use the {dn}/subtree endpoint. This endpoint requires the searchScope parameter. The supported search scopes are:\n\n    baseObject\n\n    Returns only the object directly described by the base DN.\n\n    singleLevel\n\n    Returns only the entries that are immediate children of the base entry.\n\n    wholeSubtree\n\n    Returns the base entry and all of its descendants.\n\n    subordinateSubtree\n\n    Returns the descendants of the base entry, but not the base entry itself.\n\n The searchScope parameter value is encoded in the cursor parameter in the next link URL. \n \n The search scope does not need to be provided on subsequent requests. \n \n This endpoint also accepts the includeAttributes and excludeAttributes query parameters.\n"
+			},
+			"response": []
+		},
+		{
+			"name": "Search a subtree and filter results",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "pingrestapi_svc",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "P1ngA9#S80",
+							"type": "string"
+						},
+						{
+							"key": "saveHelperData",
+							"type": "any"
+						},
+						{
+							"key": "showPassword",
+							"value": false,
+							"type": "boolean"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://pingdirectory.stage-centene.us1.ping.cloud/directory/v1/ou=hnweb_brokers,ou=Users,ou=Hni,ou=External,dc=centene,dc=com/subtree?searchScope=wholeSubtree&limit=100&filter=objectClass eq \"person\"and hniUid ",
+					"protocol": "https",
+					"host": [
+						"pingdirectory",
+						"stage-centene",
+						"us1",
+						"ping",
+						"cloud"
+					],
+					"path": [
+						"directory",
+						"v1",
+						"ou=hnweb_brokers,ou=Users,ou=Hni,ou=External,dc=centene,dc=com",
+						"subtree"
+					],
+					"query": [
+						{
+							"key": "searchScope",
+							"value": "wholeSubtree"
+						},
+						{
+							"key": "limit",
+							"value": "100"
+						},
+						{
+							"key": "includeAttributes",
+							"value": "*",
+							"disabled": true
+						},
+						{
+							"key": "excludeAttributes",
+							"value": "sn, cn, uid",
+							"disabled": true
+						},
+						{
+							"key": "filter",
+							"value": "objectClass eq \"person\"and hniUid "
+						}
+					]
+				},
+				"description": "Directory subtree endpoint\n\nTo retrieve a list of entries under a subtree of an entry, use the {dn}/subtree endpoint. This endpoint requires the searchScope parameter. The supported search scopes are:\n\n    baseObject\n\n    Returns only the object directly described by the base DN.\n\n    singleLevel\n\n    Returns only the entries that are immediate children of the base entry.\n\n    wholeSubtree\n\n    Returns the base entry and all of its descendants.\n\n    subordinateSubtree\n\n    Returns the descendants of the base entry, but not the base entry itself.\n\n The searchScope parameter value is encoded in the cursor parameter in the next link URL. \n \n The search scope does not need to be provided on subsequent requests. \n \n The GET /directory/v1/{dn}/subtree endpoint supports a SCIM filtering parameter to limit the returned result set to those entries meeting the specified criteria.\n \n Filtering is done before pagination of the response data. The filter parameter is encoded into the cursor pagination parameter; it only needs to be provided in the first request.\n"
+			},
+			"response": []
+		},
+		{
+			"name": "Retrieve the schema for a specific object class",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "pingrestapi_svc",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "P1ngA9#S80",
+							"type": "string"
+						},
+						{
+							"key": "saveHelperData",
+							"type": "any"
+						},
+						{
+							"key": "showPassword",
+							"value": false,
+							"type": "boolean"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://pingdirectory.stage-centene.us1.ping.cloud/directory/v1/schemas/hniUser",
+					"protocol": "https",
+					"host": [
+						"pingdirectory",
+						"stage-centene",
+						"us1",
+						"ping",
+						"cloud"
+					],
+					"path": [
+						"directory",
+						"v1",
+						"schemas",
+						"hniUser"
+					]
+				},
+				"description": "Directory schema endpoint\n\nThe GET /directory/v1/schemas endpoint returns a list of all configured objectClass entities on the server. If no objectClass entities are configured on the directory server, the request returns an empty list."
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "basic",
+		"basic": [
+			{
+				"key": "username",
+				"value": "{{username}}",
+				"type": "string"
+			},
+			{
+				"key": "password",
+				"value": "{{password}}",
+				"type": "string"
+			},
+			{
+				"key": "saveHelperData",
+				"type": "any"
+			},
+			{
+				"key": "showPassword",
+				"value": false,
+				"type": "boolean"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "group_to_retrieve",
+			"value": "cn=01581-All_Users_Group,ou=groups,dc=example,dc=com"
+		},
+		{
+			"key": "password",
+			"value": "password"
+		},
+		{
+			"key": "user_to_retrieve",
+			"value": "uid=user.1,ou=People,dc=example,dc=com"
+		},
+		{
+			"key": "username",
+			"value": "RestAdmin"
+		},
+		{
+			"key": "hostname",
+			"value": "10.101.57.29"
+		},
+		{
+			"key": "port",
+			"value": "8443"
+		},
+		{
+			"key": "entry_to_edit",
+			"value": "uid=user.10001,ou=people,dc=example,dc=com"
+		},
+		{
+			"key": "entry_to_delete",
+			"value": "uid=user.202,ou=employees,dc=example,dc=com"
+		},
+		{
+			"key": "entry_to_move",
+			"value": "uid=user.202,ou=people,dc=example,dc=com"
+		},
+		{
+			"key": "group_to_modify",
+			"value": "cn=01581-All_Users_Group,ou=groups,dc=example,dc=com"
+		},
+		{
+			"key": "subtree_to_search",
+			"value": "ou=People,dc=example,dc=com"
+		},
+		{
+			"key": "pf_base_url",
+			"value": "10.101.57.29:9031"
+		}
+	]
+}

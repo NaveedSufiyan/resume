@@ -1,0 +1,1 @@
+jdbc:oracle:thin:@(DESCRIPTION= (LOAD_BALANCE=yes) (ADDRESS_LIST= (ADDRESS= (PROTOCOL=TCP) (HOST=utlprod1-crs-scan.centene.com) (PORT=1521))) (CONNECT_DATA= (FAILOVER_MODE= (TYPE=select) (METHOD=basic) (RETRIES=180) (DELAY=5)) (SERVER=dedicated) (SERVICE_NAME=portal_app_p)))

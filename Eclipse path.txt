@@ -1,0 +1,14 @@
+Sharepath Drive:\\hncorp.healthnet.com\DFS-Common\DataCenter\Common03\IntSys
+
+Eclipse path: \\hncorp.healthnet.com\DFS-Common\DataCenter\Common03\IntSys\WCOE\2025\Healthnet
+Can you copy the eclipse from this path  and extract it 
+ 
+ 
+ 
+
+ 
+
+
+
+Only Single user is affected, So Downgrading the incident from P4 to P5.
+ 

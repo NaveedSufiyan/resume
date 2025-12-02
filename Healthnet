@@ -1,0 +1,171 @@
+DB Quesries
+
+select * from IBILLING.IBILLING_EMP_PAYMENT where CLIENT_ID='000173122' order by PMT_TRANSACTION_ID desc;
+ 
+select * from IBILLING.IBILLING_EMP_PAYMENT_BILL where GROUP_OR_PFID='F6343A' order by PMT_TRANSACTION_ID desc;
+ 
+select * from IBILLING.ibilling_emp_recurring_payment where client_id = '000177380';
+select * from  IBILLING_EMP_RCRNG_PMT_GRPPF where -- STATUS = 'A'and 
+CLIENT_ID = '000177380';
+ 
+Select * from employer_acct ORDER BY last_login_date;
+ 
+ 
+CLEARING THE LOGS in Argus:
+
+ls -lrt | grep -v 'Oct 22' |awk '{print}'	-> TO list all prior to Oct 22
+ls -lrt | grep -v 'Oct 22' |awk '{print$9}'   -> give this 9 in Print.
+ls -lrt | grep -v 'Oct 22' |awk '{print$9}' |xargs gzip
+  
+ 
+
+Prod server restart document
+\\hncorp.healthnet.com\DFS-Common\DataCenter\Common03\IntSys\WCOE\2023\Legacy Portals\PROD Server Restart
+Copy_Instructions_for_Legacy_Web_Support_CMRs_and_Patches_Validation_Support_Document_V2.0
+ 
+Non-prod server restart document
+\\hncorp.healthnet.com\DFS-Common\DataCenter\Common03\IntSys\WCOE\2023\Legacy Portals\NON-PROD Server Restart
+Instructions_for_Legacy_Web_Support_Non_Prod_CMRs_and_Patches_Validation_Support_Document_V2.0 (1)
+
+
+Please find the credentials for Argus tool:
+Username : CN523753(username is Case sensitive) 
+Password : Welcome789
+
+
+Path for WebServer
+/opt/oracle/bea/weblogic12c/user_projects/domains/hnweb
+/opt/oracle/bea/weblogic12c/user_projects/domains/hnweb2
+ 
+ 
+ I Billing soap Request
+ 
+ <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://healthnet.com/trca-billGroupWest/service" xmlns:java="java:com.healthnet.trca.bill.data.request.groupwest">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <bill:processRequestGroupWest xmlns:bill="http://healthnet.com/trca-billGroupWest/service">
+         <bill:hnMsgIn>
+            <java:FromDate>2023-10-17T12:59:01.848</java:FromDate>
+            <java:ToDate>2025-10-17T12:59:01.848</java:ToDate>
+            <java:Expanded>0</java:Expanded>
+            <java:Max>750</java:Max>
+            <java:WildCard>0</java:WildCard>
+            <java:Ordered>0</java:Ordered>
+            <java:PageSize>0</java:PageSize>
+            <java:PageNumber>0</java:PageNumber>
+            <java:GroupBillReqWest>
+               <java:ReturnBillSummary>true</java:ReturnBillSummary>
+               <java:ReturnBillDetail>false</java:ReturnBillDetail>
+               <java:ReturnGroupDetail>true</java:ReturnGroupDetail>
+               <java:ReturnPaymentHistory>true</java:ReturnPaymentHistory>
+               <java:ReturnRemitAddress>true</java:ReturnRemitAddress>
+               <java:ReturnBillSummaryTotal>false</java:ReturnBillSummaryTotal>
+               <java:ReturnCurrentMembershipMain>false</java:ReturnCurrentMembershipMain>
+               <java:ReturnCurrentMembershipDetail>false</java:ReturnCurrentMembershipDetail>
+               <java:ReturnCurrentMembershipTotal>false</java:ReturnCurrentMembershipTotal>
+               <java:ReturnBillingRecapMain>false</java:ReturnBillingRecapMain>
+               <java:ReturnBillingRecapDetail>false</java:ReturnBillingRecapDetail>
+               <java:ReturnBillingRecapTotal>false</java:ReturnBillingRecapTotal>
+               <java:ReturnAdjustmentMembershipMain>false</java:ReturnAdjustmentMembershipMain>
+               <java:ReturnAdjustmentMembershipDetail>false</java:ReturnAdjustmentMembershipDetail>
+               <java:ReturnAdjustmnentMembershipTotal>false</java:ReturnAdjustmnentMembershipTotal>
+               <java:ReturnMembershipChangesMain>false</java:ReturnMembershipChangesMain>
+               <java:ReturnMembershipChangesDetail>false</java:ReturnMembershipChangesDetail>
+               <java:ReturnMembershipChangesTotal>false</java:ReturnMembershipChangesTotal>
+               <java:ReturnBillingInformation>false</java:ReturnBillingInformation>
+               <java:ReturnBillPDFDetail>false</java:ReturnBillPDFDetail>
+               <java:ReturnLogoAddress>false</java:ReturnLogoAddress>
+               <java:GroupId>M6374A,M6375A,</java:GroupId>
+               <java:BillPaidFlag>U</java:BillPaidFlag>
+            </java:GroupBillReqWest>
+         </bill:hnMsgIn>
+      </bill:processRequestGroupWest>
+   </soapenv:Body>
+</soapenv:Envelope>
+
+
+
+
+
+
+
+Multiple Invoice Not yet done:
+G0961A- 51194626
+M6243A-51183909
+
+
+We have received one more ClientID and groups having issue in payer-child mapping and GroupBill
+000151712- I3618A,ZE629A,ZE629B
+
+We have received two more ClientID and groups having issue in payer-child mapping and GroupBill
+000179790 - M5678A, DMI78A   -> Two Invoices Are Showing in Soap 
+000151712 - I3618A, ZE629A 	->Two invoices are Showing in Soap
+INC03509058
+
+
+Path to check JSP file:
+ 
+[weblogic@cncpxhnwa1000 layout]$ pwd
+/opt/oracle/bea/weblogic12c/user_projects/applications/hnweb2/hnweb.ear/hnweb.war/portal/layout
+
+
+
+
+
+Legacy Tasks: 11/4/2025
+ 
+[secure] M6233A        TEMECULA VALLEY CHAMBER OF COMMERCE Ticket INC03559532- Ibilling issue - Jacqueline K. Heitman 
+  ---> Payment create Date is on 28-OCT-25
+  
+  57544	000179954	M6233A		A	28-OCT-25	100000163267			28-OCT-25 12.12.43.717553000 PM	N
+  Recurring pmt flag is F
+
+
+
+
+
+RE: [secure] M4168A CONTRERAS LAW PC  Ticket INC03559532- Ibilling issue - Jacqueline K. Heitman
+
+RE: [secure]  Ticket INC03559532- Ibilling issue - Jacqueline K. Heitman
+
+RE: Issue with Consolidated invoices on Recurring for the First INC03470010 -   Jacqueline K. Heitman
+Tr Correction
+
+
+
+
+
+
+
+
+Argus Alerts:
+
+SSL Ext Active Directory Connectivity (extSecure)
+Async Eligibility Queue Connectivity (AsyncEligJMSQueue)   Timer Queue Connectivity (TimerJMSQueue)
+Hlth Dlg Request Queue Connectivity (AsyncCommandJMSQueue)   Hlth Dlg Response Queue Connectivity (AsyncCommandCompJMSQueue)
+
+
+	Argus Monitoring
+Top:HNWEB_Home_Page_and_Server:
+
+WebLogic AdminServer Console cncpxhnwa1003
+
+
+Ack		476785	Object	30/Oct 04:09	URL http://cncpxhnwa1000:7301/console/login/LoginForm.jsp is DOWN/critical
+Ack		476787	Object	30/Oct 04:12	URL http://cncpxhnwa1003:7301/console/login/LoginForm.jsp is DOWN/critical
+
+
+
+Top:HNWEB_DATABASE:
+Ack		476789	Object	30/Oct 04:14	URL http://cncpxhnwa1003:7201/console/login/LoginForm.jsp is DOWN/critical
+Hlth Dlg Response Queue Connectivity (AsyncCommandCompJMSQueue)
+JMS Database Connectivity (hnwebJmsPool)   Transaction Repository Database Connectivity (ProviderRepositoryDataSource)
+Provider Communications Database Connectivity (prvcommDb)   Transaction Repository Database Connectivity (ProviderRepositoryDataSource)
+
+
+Top:HNWEB_Home_Page_and_Server:
+WebLogic AdminServer Console cncpxhnwa1001   WebLogic AdminServer Console cncpxhnwa1003
+
+
+
+

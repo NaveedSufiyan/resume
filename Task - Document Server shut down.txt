@@ -1,0 +1,51 @@
+RE: Document Server shut down- RITM06601408 - follow up
+ 
+Step1:
+Login on below server for WinCP
+Server: cncpxpsax1000
+User: lprng
+Pass: k$mxAu3Bgk?mUHS3!@agCYu&
+ 
+Step2:
+.CSV file path:
+/opt/export/data/doc/idcardswc/follow_up_kit
+
+Step3:
+Copy .csv files files for today's date and yesterday's on our any local folder.
+ 
+Step4:
+.txt files path:
+/opt/export/data/doc/addrclns/follow_up_kit
+
+Step 5:
+Copy .txt files files for today's date, yesterday's and day before Yesterday's on our any local folder.
+ 
+Step6:
+Copy files from local to the below path
+\\naswin\wc2vol1\SHARED\A1\PEK_MLG\Temporary_PEK_MLG_File
+
+Step7:
+Send email top of on below email chain 
+RE: Document Server shut down- RITM06601408 - follow up
+
+
+
+(copy the files from today and yesterday)
+(If you are doing the activity on Monday and don't see files for that day then wait for an hour or two and check the folder again. Also copy all files from Friday and Thursday
+to be on the safe side)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

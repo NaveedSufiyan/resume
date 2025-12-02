@@ -1,0 +1,20 @@
+If they Ask to give Provider CCHCS Details 
+
+Step 1: 
+GO to healtnet support portal there see for CCHSS Click that go inside Search for CCHCS Staff Acounts.
+
+Step2:
+Select Facility as CCHCS , And Click On Assume Idedntity for Any of the employer.
+
+Step 3:
+After the Page loads click on Go to provider Search,
+
+Step 4: 
+Select Financial plan year as 2026, Location type as Select by state and Select State as California.
+
+Step 5:
+Click on Filter by Plan/Network, There we have 2 Standard medical plan 
+		1. CA Prisons - tier 1
+		2. CA prisons - tier 2.
+If any one asks about how many plans we have in provider Search  just say this 2  plans.	
+	

@@ -1,0 +1,355 @@
+Daiy Work iNC:
+
+INC Number: INC03645413(Spacing Issue)
+Hi,
+We have updated the entry key ID details. Please clear your browser cache and log in again.
+
+INC Number:INC03647828 (Name Mismatch)
+Hi,
+We have updated the entry key ID details,Please log in again.
+
+INC Number: INC03647898(Registering for Wrong Plan)
+
+Hi,
+We noticed that a member is attempting to register for the wrong plan. Please log in using the following URL: my.ambetterhealth.com
+
+INC Number: INC03648106 (Name Is Diffrent From DB Reocrds)
+
+Hi,
+We Have updated the entry key ID details. Please Log in again.
+
+INC Number: INC03648394(No Profile)
+
+Hi,
+We couldn’t find any profile in the database records or in the member portal. Please re-register using the following URL: my.ambetterhealth.com
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-->INC Number:INC03630104
+Issue:Member can't access the portal it keeps on repeating the verification but it won't go through.
+
+First Name is wrong in Entrykey id: fname:Nguyen lname:Doan
+in Postman->
+fname :Nguyen Huy lname:Doan
+
+No Error log
+
+Action: We need to Update Entrykey id and delete profile and tell them 
+We have Updated the Entrykey id details, So kindlt Re-Register.
+
+-->INC Number:INC03630540 
+Issue: Member is not able to login or change password, when asked for a Verification Code, everytime the member puts in the code even though the code is correct, it shows as Invalid Code
+
+They Dont have AnyProfile in Ambetter And Have Spaces in their name
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-->INC Number:INC03622648
+Issue: Member lost access to email address used to register on member portal.
+Please delete account with old email address natyzambrano.283@gmail.com for her to be able to register again with new email address.
+
+In DB We have Account Status is Active.
+natycarol.283@gmail.com --> Account we have in DB
+Having Profile in ambetter
+Name is Correct with no Spacing issues.
+
+Action: Delete Old Email 
+
+
+-->INC Number: INC03623195
+Issue: no match with information
+
+No Account in DB with Email and Member ID 
+No Error Log
+Account in postman 
+In Ambetter : We Couldn't Find a Match for: perezperezluisdavid977@hotmail.com
+
+Action:we dont find any details ask to create account in entry key id and then register in the link
+
+
+-->INC Number:INC03623548(MEDICAID)
+Issue:Member is trying to log into online ssh account and receiving an error message saying the information is incorrect
+Name Diffrent in DB And Postman
+Account in DB Plan ID 55
+
+
+-->INC Number: INC03622048
+Issue:Member is not able to login with this member ID number - unble to see the information in the database
+
+No Acoount with member ID and Email ID and No Error Log
+Account is there in Postman
+No Profile in Ambetter 
+No Spacing Issues
+
+I have we have verifed that the acoount given is minor so Kindly Advice the Parent to enroll their name as Alternate contact or responsible person
+
+-->INC Number: INC03622534
+Issue: the member is trying to log in multiple times and once the member login all he can see is blank space
+In Postman: Name is diffrent TY LY
+
+Having Account in DB 2 Accounts both are self Y and active
+1) d.e.vin.le.abc@gmail.com --> FOr this email in Ambetter we have 2 Profiles
+2) lydannyly103@gmail.com --> For this Email we have 1 profile and name is diffrent from postman and from db its matching and in Profile we have Name as TY LY it 
+
+d.e.vin.le.abc@gmail.com --> Name for this Account is TY LY
+lydannyly103@gmail.com: Profile name is Correct in Ambetter but First name and last name is diffrent in postman  and in incident they mentioned
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-->INC Number:INC03605440
+
+Issue: Member could not sign up or sign in using the preferred email , they wanted to use the email address thaliahale488@gmail.com so they could sign up and log in so
+they could check their Policy using this application
+
+
+In DB They have 2 Accounts Active 
+DOB : 31-DEC-64
+t10354923@gmail.com  --> Having Profile in Ambbetter no Mistakes
+thaliahale488@gmail.com -->(Preferred Email)  --> MFA Locked -> Profile is there
+No Email error Log
+Login wiht preffered email id
+
+
+
+-->INC Number:INC03603906
+
+Issue: the member reports that she is trying to access her  member portal through website ambetterhealth.com and the system shows 
+"you information doesn't match" even when the member had has already created her account, the  member used to be able to access her online account without issues, 
+however this time the system required to enter her DOB , member ID or last 6 SSN and for some reason aren't working 
+so she is reporting this issue in order we can fix the discrepancy in the system
+
+Having 2 Accounts in DB 
+child and Self
+Checked Email Error log for self account : Member attempting to register for wrong plan
+Name is Correct in Ambbeter
+lilly82rl@gmail.com
+
+my.abbeter
+
+-->INC Number:INC03612622
+
+Issue: Member can't access her online portal or Mobile App create successfully.
+
+No Account with memberID and emailID
+Error Log for emailID: Member attempting to register for wrong plan
+No Profile in Ambbeter Marketplace
+No Spaces everything Correct
+
+Register Using correct url
+
+
+-->INC Number:INC03601475
+
+Issues:  Member called in because she cannot log in to her account through ambetter website even though they received a verification code and they already change their password.
+
+Have 1 Account in DB Active self Y
+chives27@yahoo.com
+
+Error Log: Member attempting to register for wrong plan
+No Space Issues
+they have Profile in Ambbeter
+
+new URl
+
+
+
+
+
+modiefed account kindly attempt to login
+
+delete stale records
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-->Inc Number: INC03601221
+
+Issue:  MBR NOT ABLE TO LOG INTO MNR PORTAL OR ONCE INSIDE PORTAL AUTOMATICALLY KICKED OUT
+
+Self Y
+User Status Migrated
+No Email Error Log 
+We have Spaces in Name in my.ambetter
+
+
+
+-->Inc Number:INC03603567
+
+Issue:Member cannot sign in after using correct credentials on the member web portal
+Registering for Wrong plan 
+
+
+
+-->INC Number: INC03599685
+
+Issue: member cant create an account on the website and on the mobile app.
+
+No Account with Member ID
+
+Member attempting to register for wrong plan
+
+
+-->INC Number: INC03600472
+
+Issue: The member is calling in regards to her online account, since member can no longer access her online acc. even if her credentials are correct.
+Member Registering for wrong Plan
+No Account in DB with Name and Email 
+Account in Postman
+There is No Profile in Ambberter 
+
+
+
+-->INC NUMBER: INC03600727

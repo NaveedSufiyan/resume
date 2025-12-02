@@ -1,0 +1,129 @@
+1.DOWNGRADING INCIDENTS :
+
+GO to Open inc
+Click on filter Select -> State should be in Progress 
+Note:
+DO NOT DOWNGRADE INCIDENTS WITH MUTLIPLE MEMBER/PROVIDER ISSUES / URGENT ISSUES/REOPENED INCS/ 2ND OR 3RD INCIDENT OPENED FOR THE SAME ISSUE.
+Only Single user is affected, So Downgrading the incident from P4 to P5.
+Single user impact hence reducing priority to P5.
+
+2.FOR COMBINED REPORT:
+On Monday keeep Filter as Fridays date and present day Date
+GO to Weekly Metrics Select Resolved Incidents Go to filter In Filter Select date from yesterday 06:00:00 today 06:00:00
+
+CHECK FOR THIS ASSIGNMENT GROUPS:
+CNC Web Support
+CNC Web Prod Support Engineering
+CAAS 2.0 PRODUCTION SUPPORT
+
+NEXT STEP GO TO OPEN INCIDENTS FILTER AND DO THE SAME.
+
+Format Will Come Like this:
+Priority: 3 - Medium (27)
+Priority: 4 - Low (63)
+Priority: 5 - Minimal (162)
+
+
+
+
+Project Labels:-
+GO to Digital Prod Support Dashboard
+Select weekly metrics Click on Resolved Greenline And FIlter
+1ST nOV 
+
+
+EOD: 
+
+After 4:30 Send Claims Status
+EOD Report Send at 5:15
+
+FOr Tuesday and friday :
+
+Claims Submission :
+UnProcessed Claims should be Less than 10 ->  
+time: for yesterday date no need to see if its above 10 pm 
+
+And for reamaining days see for all TIme (Entire Entries)
+WITH Missing status 
+
+For Normal Days Check Claims For yesterday date, time should be <10 
+
+600332694	P	7	1633	07-NOV-25 10.10.11.762000000 AM
+500448866	P	1	702	10-NOV-25 09.36.44.000000000 AM
+600333354	I	1	79	10-NOV-25 11.15.12.845000000 AM
+
+For Normal days WE do not check values <10
+
+
+
+
+
+
+To generate Report For EOD:
+
+GO to CMD: 
+
+Step 1: cd C:\Users\CN523753\script
+
+Step2: java -jar Monitoring_standalone.jar
+
+Step3:Enter UserName:CN523753 Enter Password:Junaidsalmanfarheennikhat
+
+Step4: Report will be Generated here  C:\Users\CN523753\script
+
+
+
+
+
+
+
+
+
+
+EUS_BPSPRD_CCM_REMA_READONLY_ROLE 
+EUS_BPSPRD_CTS_READONLY_ROLE
+
+Web Portal Database - PORTAL_APP_P - Prod - ReadOnly
+
+
+
+GitLab_Users
+Edfcs_TM_Org_User_Prod
+Teradata - WEB_APP_OWN_RO_ROLE -Production Environment_
+Portico - Non Core User - Prod_Train
+Web_Services_CD
+CHP_USER_P
+dynatrace_users
+PROD_WEB_SUPPORT_TOOL
+ServiceNow-Agent-Mobile
+STL_CONFLUENCE_USERS
+STL_Web_Support_User
+TMADMIN_Web_Support
+TX_HP_Support
+Web Portal Users
+
+
+
+
+
+
+
+Websites:
+- www.wellcare.com
+- www.fideliscare.org
+- members.fideliscare.org
+- providers.fideliscare.org
+
+
+
+600335583	P	50	1753	21-NOV-25 01.25.09.302000000 PM
+600335583	P	50	1753	21-NOV-25 01.25.09.302000000 PM
+600335593	P	30	1693	21-NOV-25 02.30.12.938000000 PM
+600335613	P	32	1108	21-NOV-25 03.35.08.967000000 PM
+
+
+
+
+PRV.PROVIDER.PORTAL.AUTHS.WF, End Time:11/21/2025 05:46 PM,ENDED_OK - ended normally
+PRV.AUTH.WEB_TO_T.WEB1.FEWF, End Time:11/22/2025 01:51 AM,ENDED_OK - ended normally
+PRV.AUTH.WEB_TO_T.WEB2.FEWF, End Time:11/22/2025 06:11 AM,ENDED_OK - ended normally

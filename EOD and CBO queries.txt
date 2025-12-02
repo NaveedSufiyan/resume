@@ -1,0 +1,125 @@
+--EOD Validation CBO status query--
+
+SELECT WC.WEB_CLAIM_BATCH_ID,WCRC.CREATE_DATE,WCB.SUBMITTED_DATE,WC.WEB_CLAIM_ID,XCTU.XMSG_CLAIM_TIBCO_UPDT_ID,WCRC.CRC_STATUS,WCB.WEB_CLAIM_RELEASE_CONTROL_ID,wc.claim_type,XCTU.SENT_COUNT,
+WC.CLAIM_STATE,wc.amysis_claim_nbr,wcb.rtep_flag,WCB.BC_STATUS,
+(case when XCTU.MSG is null then 'missing' ELSE 'not missing' END ) as CBO_STATUS,
+(case when XCTU.MSG like '%68068%' then 'BH' ELSE 'Medical' END ) as typeClaim
+FROM NWEBOWN.WEB_CLAIM_RELEASE_CONTROL WCRC
+INNER JOIN NWEBOWN.WEB_CLAIM_BATCH WCB ON WCRC.WEB_CLAIM_RELEASE_CONTROL_ID = WCB.WEB_CLAIM_RELEASE_CONTROL_ID
+INNER JOIN NWEBOWN.WEB_CLAIM WC ON WC.WEB_CLAIM_BATCH_ID = WCB.WEB_CLAIM_BATCH_ID
+LEFT JOIN NWEBOWN.XMSG_CLAIM_TIBCO_UPDT XCTU ON XCTU.CLAIM_BATCH_ID = WCB.WEB_CLAIM_BATCH_ID
+WHERE 1=1
+and WCB.WEB_CLAIM_RELEASE_CONTROL_ID = '600326803'
+and wcb.rtep_flag = 'N'
+and wc.amysis_claim_nbr is NULL
+ORDER BY WCRC.CREATE_DATE DESC;
+
+select web_claim_release_control_id, claim_type, unprocessed_claims, total_claim_count, create_date
+from (select wcrc.web_claim_release_control_id,
+wc.claim_type,
+sum(case when claim_state = 'EDIProcessing' then 1 else 0 end) as unprocessed_claims,
+count(wc.web_claim_id) AS total_claim_count,
+wcrc.create_date
+from nwebown.web_claim_release_control wcrc
+inner join nwebown.web_claim_batch wcb
+on wcrc.web_claim_release_control_id = wcb.web_claim_release_control_id
+inner join nwebown.web_claim wc
+on wc.web_claim_batch_id = wcb.web_claim_batch_id
+where wcrc.create_date > trunc(current_timestamp -6)
+group by wcrc.web_claim_release_control_id, wcrc.create_date, wc.claim_type
+)
+where unprocessed_claims != 0
+order by create_date asc;
+
+
+
+--CBO Missing status query(Tuesday/Friday)--
+
+SELECT 
+WC.WEB_CLAIM_BATCH_ID,  --WHAT PROD SUPPORT GIVES AS THE LIST, AKA CLAIM_BATCH_ID ON TIBCO TABLE.  
+WCRC.CREATE_DATE,
+WCB.SUBMITTED_DATE,
+WC.WEB_CLAIM_ID, -- WHAT WE GIVE AS A WEB TRACKER /  THIS IS THE "WEB #/WEB #" ON UI
+XCTU.XMSG_CLAIM_TIBCO_UPDT_ID, -- ID FOR TIBCO, USED FOR REPROCESSING
+
+WCRC.CRC_STATUS,
+WCB.WEB_CLAIM_RELEASE_CONTROL_ID, --- USED TO RESEND
+wc.claim_type,
+XCTU.SENT_COUNT,
+WC.CLAIM_STATE,wc.amysis_claim_nbr,wcb.rtep_flag,
+WCB.BC_STATUS,
+(case  when  XCTU.MSG is null then 'missing' ELSE 'not missing' END ) as CBO_STATUS, 
+(case  when  XCTU.MSG  like '%68068%' then 'BH' ELSE 'Medical' END ) as typeClaim
+
+FROM NWEBOWN.WEB_CLAIM_RELEASE_CONTROL WCRC
+INNER JOIN NWEBOWN.WEB_CLAIM_BATCH WCB ON WCRC.WEB_CLAIM_RELEASE_CONTROL_ID = WCB.WEB_CLAIM_RELEASE_CONTROL_ID
+INNER JOIN NWEBOWN.WEB_CLAIM WC  ON WC.WEB_CLAIM_BATCH_ID = WCB.WEB_CLAIM_BATCH_ID
+LEFT JOIN NWEBOWN.XMSG_CLAIM_TIBCO_UPDT XCTU ON XCTU.CLAIM_BATCH_ID = WCB.WEB_CLAIM_BATCH_ID
+WHERE 1=1
+and WCB.WEB_CLAIM_RELEASE_CONTROL_ID = '600327564'
+and wcb.rtep_flag = 'N'
+and wc.amysis_claim_nbr IS NULL
+and wc.claim_state = 'EDIProcessing'
+ORDER BY WCRC.CREATE_DATE DESC;
+
+
+select web_claim_release_control_id, claim_type, unprocessed_claims, total_claim_count, create_date
+from (select wcrc.web_claim_release_control_id,
+       wc.claim_type,
+       sum(case when claim_state = 'EDIProcessing' then 1 else 0 end) as unprocessed_claims,
+       count(wc.web_claim_id) AS total_claim_count,
+       wcrc.create_date
+from nwebown.web_claim_release_control wcrc
+inner join nwebown.web_claim_batch wcb
+    on wcrc.web_claim_release_control_id = wcb.web_claim_release_control_id
+inner join nwebown.web_claim wc
+    on wc.web_claim_batch_id = wcb.web_claim_batch_id
+where wcrc.create_date > trunc(current_timestamp -7)
+group by wcrc.web_claim_release_control_id, wcrc.create_date, wc.claim_type
+)
+where unprocessed_claims != 0
+order by create_date asc;
+
+
+
+Auth Processing Query:  
+SELECT auth_status.auth_status, COUNT(*) FROM NWEBOWN.ML_AUTHORIZATION
+INNER JOIN NWEBOWN.AUTH_STATUS ON NWEBOWN.AUTH_STATUS.AUTH_STATUS_ID = NWEBOWN.ML_AUTHORIZATION.AUTH_STATUS_ID
+WHERE CREATE_DATE >= trunc(sysdate)
+GROUP BY auth_status.auth_status, ml_authorization.auth_status_ID;
+
+ 
+// Template For EOD: 
+Active Outages: 
+	INC03571739 (P2,OH): (Restored & Monitoring) Faxcom services are degraded, impacting 70% of capacity and critical business functions, with no workaround and high compliance risk.
+	INC03509058	(p1,IP): All Internal Users Unable To Log Into TruCare Classic Or Experiencing Significant Latency
+
+Application Health: All Green 
+ 
+WEB:
+Claim Processing Status: All Claims are processed successfully. Rest of the claims are pending processing since 11:40 PM yesterday.
+Auth Processing Status: No Auth in sent status.
+Health Passport Control-M Status: Ended-OK
+HN Legacy Provider Data Load:  Yet to start
+HN Legacy MAPD Enrollment Status: Success
+HN Legacy MedSupp Enrollment status: Success
+
+CAAS : 
+Command Center Queues 1004: No Issues
+Command Center Queues 1008: Three Job Failures 
+1 Day SLA Communication Status (Prism, CenPas, etc.): No Issues
+CCM Batch Job: No issues
+OnePortal Status: No issues
+CCM Status: No issues
+ 
+On-going issues: No issues
+
+
+
+
+
+
+
+ RV.AUTH.WEB_TO_T.WEB2.FEWF     10/24/2025 07:11 AM    
+PRV.AUTH.WEB_TO_T.WEB1.FEWF  
+10/24/2025 07:11 AM     10/24/2025 07:17 AM
